@@ -1,0 +1,73 @@
+﻿$def with (auth_info)
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>BigFace认证服务器</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="../static/css/reset.css">
+<link rel="stylesheet" href="../static/css/style.css">
+
+<script src="../static/js/jquery-1.10.1.min.js" charset="utf-8" type="text/javascript"></script>
+<script src="../static/js/qrcode.js" charset="utf-8" type="text/javascript"></script>
+<script src="../static/js/jquery.qrcode.js" charset="utf-8" type="text/javascript"></script>
+<script type="text/javascript">
+    function generate_qrcode() {
+        var text = "$:auth_info";
+        $$('#div_div').qrcode({
+          text: utf16to8(text),
+          height: 256,
+          width: 256,
+          src: './MYLOG1.jpg'
+        });
+    }
+function utf16to8(str) {
+  var out, i, len, c;
+  out = "";
+  len = str.length;
+  for (i = 0; i < len; i++) {
+    c = str.charCodeAt(i);
+    if ((c >= 0x0001) && (c <= 0x007F)) {
+        out += str.charAt(i);
+    } else if (c > 0x07FF) {
+        out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+        out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+        out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+    } else {
+        out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+        out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+    }
+  }
+  return out;
+}
+window.onload = generate_qrcode;
+</script>
+
+<script type="text/javascript">
+function getUserInfo()
+{
+	var request = new XMLHttpRequest();
+    request.open("GET","http://bigfaceserver-isyangjie.myalauda.cn/WebAuth");
+    request.send();
+}
+setInterval('getUserInfo()',2000);
+</script>
+
+</head>
+<body style="background-image:url(../static/img/backgrounds/1.jpg);background-position:center; background-repeat:repeat-y">
+<div class="page-container">
+<h1>BIGFACE</h1>
+<h1>身份认证中心</h1>
+<br>
+<img src="../static/img/bigface256r.png" width="160" height="160" border="0" alt="">
+<h2>扫一扫，登录应用系统</h2><br>
+<div id="div_div">
+  <div id="qr_container" style="margin:auto; position:relative;"></div>
+</div><br>
+<h3><a href="http://bigfaceserver-isyangjie.myalauda.cn/static/bigface.apk"><font size="" color="#3300cc">下载BigFace认证客户端</font></a></h3><br>
+<h3><b><i>Copyright&nbsp;&copy;&nbsp;杰思创想 2015</i></b></h3>
+<br>
+</div>
+</body>
+</html>

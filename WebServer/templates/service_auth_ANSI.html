@@ -1,0 +1,60 @@
+$def with (auth_info)
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>BigFace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="../static/css/reset.css">
+<link rel="stylesheet" href="../static/css/style.css">
+
+<script src="../static/js/jquery-1.10.1.min.js" charset="utf-8" type="text/javascript"></script>
+<script src="../static/js/qrcode.js" charset="utf-8" type="text/javascript"></script>
+<script src="../static/js/jquery.qrcode.js" charset="utf-8" type="text/javascript"></script>
+<script type="text/javascript">
+    function generate_qrcode() {
+        var text = "$:auth_info";
+        $$('#div_div').qrcode({
+          text: utf16to8(text),
+          height: 256,
+          width: 256,
+          src: './MYLOG1.jpg'
+        });
+    }
+function utf16to8(str) {
+  var out, i, len, c;
+  out = "";
+  len = str.length;
+  for (i = 0; i < len; i++) {
+    c = str.charCodeAt(i);
+    if ((c >= 0x0001) && (c <= 0x007F)) {
+        out += str.charAt(i);
+    } else if (c > 0x07FF) {
+        out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+        out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+        out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+    } else {
+        out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+        out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+    }
+  }
+  return out;
+}
+window.onload = generate_qrcode;
+</script>
+</head>
+<body>
+<div class="page-container">
+<img src="../static/img/bigface256r.png" width="160" height="160" border="0" alt="">
+<h1>BigFace Server</h1>
+<h3>Login by Scanning the QRCode</h3>
+<h3>     </h3>
+<h1> </h1>
+<div id="div_div">
+  <div id="qr_container" style="margin:auto; position:relative;"></div>
+</div>
+<canvas id="Canvas"></canvas>
+</div>
+</body>
+</html>
